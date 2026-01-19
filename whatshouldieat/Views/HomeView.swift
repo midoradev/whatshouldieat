@@ -17,14 +17,11 @@ struct HomeView: View {
                 shakeSection(palette: palette)
                 trendingSection(palette: palette)
             }
-            .padding(.bottom, 40)
+            .padding(.bottom, 24)
         }
         .background(palette.background.ignoresSafeArea())
         .safeAreaInset(edge: .top, spacing: 0) {
             header(palette: palette)
-        }
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            bottomNav(palette: palette)
         }
     }
 
@@ -266,48 +263,6 @@ struct HomeView: View {
         .padding(.horizontal, 16)
     }
 
-    private func bottomNav(palette: HomePalette) -> some View {
-        HStack {
-            navButton(title: "Home", systemImage: "house.fill", isActive: true, palette: palette)
-            Spacer()
-            navButton(title: "Discover", systemImage: "safari", isActive: false, palette: palette)
-            Spacer()
-            ZStack {
-                Circle()
-                    .fill(palette.primary)
-                    .frame(width: 56, height: 56)
-                    .shadow(color: palette.primary.opacity(0.4), radius: 10, x: 0, y: 6)
-                Image(systemName: "fork.knife")
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundColor(palette.text)
-            }
-            .offset(y: -10)
-            Spacer()
-            navButton(title: "Track", systemImage: "chart.line.uptrend.xyaxis", isActive: false, palette: palette)
-            Spacer()
-            navButton(title: "Profile", systemImage: "person", isActive: false, palette: palette)
-        }
-        .padding(.horizontal, 24)
-        .padding(.vertical, 12)
-        .background(palette.card.opacity(0.95))
-        .overlay(
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(palette.border.opacity(0.5)),
-            alignment: .top
-        )
-    }
-
-    private func navButton(title: String, systemImage: String, isActive: Bool, palette: HomePalette) -> some View {
-        VStack(spacing: 4) {
-            Image(systemName: systemImage)
-                .font(.system(size: 18, weight: .semibold))
-            Text(title.uppercased())
-                .font(.system(size: 9, weight: .bold))
-                .tracking(1)
-        }
-        .foregroundColor(isActive ? palette.primary : palette.mutedText)
-    }
 }
 
 private struct MealCardView: View {

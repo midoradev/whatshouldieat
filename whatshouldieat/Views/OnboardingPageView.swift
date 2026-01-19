@@ -111,16 +111,16 @@ private struct OnboardingStepView: View {
     @ViewBuilder
     private var illustration: some View {
         switch step {
-        case .cuisines:
-            cuisinesIllustration
+        case .shake:
+            shakeIllustration
         case .nutrition:
             nutritionIllustration
-        case .goals:
-            goalsIllustration
+        case .discover:
+            discoverIllustration
         }
     }
 
-    private var cuisinesIllustration: some View {
+    private var shakeIllustration: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 24, style: .continuous)
                 .fill(step.surface)
@@ -131,26 +131,30 @@ private struct OnboardingStepView: View {
                 .shadow(color: Color.black.opacity(0.08), radius: 18, x: 0, y: 8)
 
             ZStack {
-                Circle()
-                    .fill(step.accent.opacity(0.12))
-                    .frame(width: 180, height: 180)
-                    .overlay(
-                        Circle()
-                            .stroke(step.accent.opacity(0.35), style: StrokeStyle(lineWidth: 2, dash: [6, 6]))
-                    )
+                shakeLine(width: 48)
+                    .offset(x: -132, y: -24)
+                    .rotationEffect(.degrees(12))
+                shakeLine(width: 32)
+                    .offset(x: -116, y: 14)
+                    .rotationEffect(.degrees(-12))
+                shakeLine(width: 48)
+                    .offset(x: 132, y: -24)
+                    .rotationEffect(.degrees(-12))
+                shakeLine(width: 32)
+                    .offset(x: 116, y: 14)
+                    .rotationEffect(.degrees(12))
 
-                Image(systemName: "globe")
-                    .font(.system(size: 56, weight: .light))
-                    .foregroundColor(step.accent)
+                phoneCard
+                    .rotationEffect(.degrees(6))
 
                 iconBadge(symbol: "fork.knife", color: step.accent)
-                    .offset(x: -110, y: -90)
-                iconBadge(symbol: "cup.and.saucer", color: step.accent)
-                    .offset(x: 110, y: -70)
+                    .offset(x: -92, y: -122)
+                iconBadge(symbol: "takeoutbag.and.cup.and.straw", color: step.accent)
+                    .offset(x: 122, y: -54)
                 iconBadge(symbol: "leaf", color: step.accent)
-                    .offset(x: -100, y: 90)
-                iconBadge(symbol: "flame", color: step.accent)
-                    .offset(x: 110, y: 100)
+                    .offset(x: -126, y: 64)
+                iconBadge(symbol: "cup.and.saucer", color: step.accent)
+                    .offset(x: 92, y: 118)
             }
         }
         .frame(height: 320)
@@ -206,76 +210,44 @@ private struct OnboardingStepView: View {
         }
     }
 
-    private var goalsIllustration: some View {
+    private var discoverIllustration: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 24, style: .continuous)
-                .fill(Color.white)
+                .fill(step.surface)
                 .overlay(
                     RoundedRectangle(cornerRadius: 24, style: .continuous)
-                        .stroke(Color.white.opacity(0.7), lineWidth: 1)
+                        .stroke(Color.black.opacity(0.05), lineWidth: 1)
                 )
-                .shadow(color: Color.black.opacity(0.08), radius: 16, x: 0, y: 8)
+                .shadow(color: Color.black.opacity(0.08), radius: 18, x: 0, y: 8)
 
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(
-                    LinearGradient(
-                        colors: [step.accent.opacity(0.1), Color(hex: 0xFDE7DA)],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
+            ZStack {
+                Circle()
+                    .fill(step.accent.opacity(0.1))
+                    .frame(width: 192, height: 192)
+                    .overlay(
+                        Circle()
+                            .stroke(step.accent.opacity(0.3), style: StrokeStyle(lineWidth: 4, dash: [8, 6]))
                     )
-                )
-                .padding(16)
 
-            VStack(spacing: 16) {
-                targetBadge
+                Image(systemName: "globe")
+                    .font(.system(size: 64, weight: .light))
+                    .foregroundColor(step.accent)
 
-                HStack(spacing: 12) {
-                    statPill(title: "Daily Goal", value: "1,850 kcal")
-                    statPill(title: "Protein", value: "120 g")
-                }
+                bentoIcon(symbol: "fork.knife")
+                    .offset(x: -120, y: -118)
+                    .rotationEffect(.degrees(-12))
+                bentoIcon(symbol: "takeoutbag.and.cup.and.straw")
+                    .offset(x: 120, y: -98)
+                    .rotationEffect(.degrees(12))
+                bentoIcon(symbol: "cup.and.saucer")
+                    .offset(x: -112, y: 108)
+                    .rotationEffect(.degrees(6))
+                bentoIcon(symbol: "leaf")
+                    .offset(x: 110, y: 114)
+                    .rotationEffect(.degrees(-12))
             }
-            .padding(.horizontal, 24)
-
-            iconBadge(symbol: "checkmark", color: step.accent)
-                .offset(x: 120, y: -110)
-            iconBadge(symbol: "leaf", color: Color(hex: 0x35B57A))
-                .offset(x: -120, y: 110)
         }
         .frame(height: 320)
-    }
-
-    private var targetBadge: some View {
-        ZStack {
-            Circle()
-                .stroke(step.accent.opacity(0.15), lineWidth: 14)
-                .frame(width: 140, height: 140)
-            Circle()
-                .stroke(step.accent.opacity(0.35), lineWidth: 8)
-                .frame(width: 100, height: 100)
-            Circle()
-                .fill(step.accent.opacity(0.2))
-                .frame(width: 56, height: 56)
-            Image(systemName: "checkmark")
-                .font(.system(size: 24, weight: .bold))
-                .foregroundColor(step.accent)
-        }
-    }
-
-    private func statPill(title: String, value: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.caption)
-                .foregroundColor(step.mutedText)
-            Text(value)
-                .font(.system(size: 15, weight: .semibold))
-                .foregroundColor(step.titleText)
-        }
-        .padding(.vertical, 10)
-        .padding(.horizontal, 12)
-        .background(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color.white.opacity(0.9))
-        )
     }
 
     private func iconBadge(symbol: String, color: Color) -> some View {
@@ -288,6 +260,50 @@ private struct OnboardingStepView: View {
                 .foregroundColor(color)
         }
         .frame(width: 44, height: 44)
+    }
+
+    private func bentoIcon(symbol: String) -> some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(Color.white)
+                .shadow(color: Color.black.opacity(0.08), radius: 6, x: 0, y: 4)
+            Image(systemName: symbol)
+                .font(.system(size: 22, weight: .semibold))
+                .foregroundColor(step.accent)
+        }
+        .frame(width: 52, height: 52)
+    }
+
+    private func shakeLine(width: CGFloat) -> some View {
+        Capsule()
+            .fill(step.accent.opacity(0.2))
+            .frame(width: width, height: 6)
+    }
+
+    private var phoneCard: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 40, style: .continuous)
+                .fill(Color(hex: 0x1C120D))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 40, style: .continuous)
+                        .stroke(Color(hex: 0x3A3430), lineWidth: 6)
+                )
+                .shadow(color: Color.black.opacity(0.2), radius: 18, x: 0, y: 12)
+
+            RoundedRectangle(cornerRadius: 32, style: .continuous)
+                .fill(step.accent.opacity(0.12))
+                .frame(width: 102, height: 210)
+
+            Image(systemName: "iphone.radiowaves.left.and.right")
+                .font(.system(size: 44, weight: .bold))
+                .foregroundColor(step.accent)
+
+            Capsule()
+                .fill(Color(hex: 0x3A3430))
+                .frame(width: 46, height: 6)
+                .offset(y: -112)
+        }
+        .frame(width: 130, height: 250)
     }
 }
 
@@ -337,41 +353,43 @@ private struct MacroBar: View {
 }
 
 private enum OnboardingStep: Int, CaseIterable, Identifiable {
-    case cuisines
+    case shake
     case nutrition
-    case goals
+    case discover
 
     var id: Int { rawValue }
 
     var title: String {
         switch self {
-        case .cuisines:
-            return "Explore World Cuisines"
+        case .shake:
+            return "Shake to Decide"
         case .nutrition:
             return "Track Your Nutrition"
-        case .goals:
-            return "Reach Your Goals"
+        case .discover:
+            return "Discover World Cuisines"
         }
     }
 
     var subtitle: String {
         switch self {
-        case .cuisines:
-            return "Discover delicious meals from over 50 countries at your fingertips."
+        case .shake:
+            return "Can't decide what to eat? Shake to get a global meal with ingredients and animated steps."
         case .nutrition:
-            return "Log your meals easily and keep an eye on your daily calories and macros."
-        case .goals:
-            return "Set your health targets and let us help you find the perfect meals to stay on track."
+            return "Log meals and see calories and macros update throughout your day."
+        case .discover:
+            return "Browse dishes from around the world and explore by country."
         }
     }
 
     var ctaTitle: String {
-        self == .goals ? "Get Started" : "Next"
+        self == .discover ? "Get Started" : "Next"
     }
 
     var accent: Color {
         switch self {
-        case .cuisines, .goals:
+        case .shake:
+            return Color(hex: 0xF66923)
+        case .discover:
             return Color(hex: 0xF66923)
         case .nutrition:
             return Color(hex: 0x36E2C6)
@@ -389,21 +407,23 @@ private enum OnboardingStep: Int, CaseIterable, Identifiable {
 
     var background: Color {
         switch self {
-        case .cuisines:
+        case .shake:
             return Color(hex: 0xFAFAF9)
         case .nutrition:
             return Color(hex: 0xF9FAFA)
-        case .goals:
-            return Color(hex: 0xFCF9F8)
+        case .discover:
+            return Color(hex: 0xFAFAF9)
         }
     }
 
     var surface: Color {
         switch self {
-        case .cuisines:
+        case .shake:
             return Color(hex: 0xF7F3EE)
-        case .nutrition, .goals:
+        case .nutrition:
             return Color.white
+        case .discover:
+            return Color(hex: 0xF7F3EE)
         }
     }
 
@@ -411,19 +431,19 @@ private enum OnboardingStep: Int, CaseIterable, Identifiable {
         switch self {
         case .nutrition:
             return Color(hex: 0x0E1B18)
-        case .cuisines, .goals:
+        case .shake, .discover:
             return Color(hex: 0x1C120D)
         }
     }
 
     var mutedText: Color {
         switch self {
-        case .cuisines:
+        case .shake:
             return Color(hex: 0x6B645E)
         case .nutrition:
             return Color(hex: 0x51625D)
-        case .goals:
-            return Color(hex: 0x5E4D46)
+        case .discover:
+            return Color(hex: 0x6B645E)
         }
     }
 }

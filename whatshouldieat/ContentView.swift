@@ -36,7 +36,7 @@ struct ContentView: View {
                     }
                 )
             case .home:
-                HomeView()
+                MainTabView()
             }
         }
         .onChange(of: hasCompletedAuth) { _, completed in
